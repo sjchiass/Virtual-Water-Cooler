@@ -8,7 +8,7 @@
 #!pip install pywin32
 
 
-# In[9]:
+# In[40]:
 
 
 # Task: Create an automated coworker matchmaking script
@@ -20,6 +20,7 @@
 # 10/27/2020 - Completed automated email process. Ran into an issue pip installing googletrans (something about proxy networks)
 # 10/28/2020 - Created separate program to translate (On the Cloud)
 # 11/09/2020 - Matching algorithm only makes unique pairs
+# 11/10/2020 - Completed French translation of email message
 
 """Initialization"""
 # Import statements
@@ -34,7 +35,6 @@ engDict = {
     "French": "Français",
     "Morning": "Matin",
     "Afternoon": "Après-midi",
-    "No preference": "Pas de préférence",
     "Field 1 - Office of the Chief Statistician": "Secteur 1 - Bureau du Statisticien en Chef",
     "Field 3 - Corporate Strategy and Management": "Secteur 3 - Stratégies et Gestion Intégrées",
     "Field 4 - Strategic Engagement": "Secteur 4 - Engagement Stratégique",
@@ -43,8 +43,6 @@ engDict = {
     "Field 7 - Census, Regional Services, and Operations": "Secteur 7 - Recensement, Services Régionaux, et Opérations",
     "Field 8 - Social Health and Labour Statistics": "Secteur 8 - Statistiques Sociale, de la Santé et du Travail",
     "Field 9 - Digital Solutions": "Secteur 9 - Solutions Numériques",
-    "Yes": "Oui",
-    "No": "Non"
 }
 
 # Read the translated, combined responses csv file skipping the column header row.
@@ -63,7 +61,7 @@ for i in range(len(df)):
 display(df)
 
 
-# In[2]:
+# In[41]:
 
 
 """Convert No preference values"""
@@ -142,7 +140,7 @@ display(dfCopy3)
 display(dfCopy4)
 
 
-# In[26]:
+# In[42]:
 
 
 """Matchmaking"""
@@ -227,7 +225,7 @@ for j in range(len(nomatchGroups)):
     display(nomatchGroups[j])
 
 
-# In[27]:
+# In[44]:
 
 
 """Automated Emails for Matched Groups"""
@@ -287,7 +285,7 @@ You have been matched together for a Virtual Watercooler conversation. We recomm
 Teams scheduled during regular business hours for a conversation of at about 10 minutes but it is up to 
 you to decide how to proceed.
 
-The group's preferences are {} and {}. Your field of work is {}, respectively.
+The group preferd to chat in {} in the {}. You work in {}, respectively.
 
 As this is our beta version so please reach out to Innovation Coordinator / Coord de l'innovation 
 (STATCAN) <username>@<email domain> with all of your 
@@ -296,8 +294,6 @@ feedback, questions and suggestions. Thank you for using the StatCan Virtual Wat
 
 
 Sincerely,
-
-
 
 The StatCan Virtual Watercooler Team
 
@@ -311,16 +307,51 @@ Innovation Secretariat""".format(', '.join(mgName[i]) if len(mgName[i]) > 2 else
     # match group into string
 
     # French version
-    # Replace the word "and" with "et" in the last element of mgName
-    mgName[i][-1] = mgName[i][-1].replace("and", "et")
+    # Remove the word "and" in the last element of mgName
+    mgName[i][-1] = mgName[i][-1].replace("and ", "")
 
-    # Replace the word "and" with "et" in the last element of mgName
-    mgField[i][-1] = mgField[i][-1].replace("and", "et")
+    # Replace the word "and" in the last element of mgField
+    mgField[i][-1] = mgField[i][-1].replace("and ", "")
+    
+    # Map the values for Language, Time Preference, and Field to their dictionary values (Translate English to French)
+    matchGroups[i].iat[0, 2] = engDict.get(matchGroups[i].iat[0, 2])
+    matchGroups[i].iat[0, 3] = engDict.get(matchGroups[i].iat[0, 3])
+    
+    for f in range(len(mgField[i])):
+        mgField[i][f] = engDict.get(mgField[i][f])
+    
+   # Add the word "et" to the last element in mgName
+    mgName[i][-1] = "et " + mgName[i][-1]
 
-    textFr = """Bonjour {}, 
+    # Add the word "and" to the last element in mgField
+    mgField[i][-1] = "et " + mgField[i][-1]
+    
+    # French translation of the email
+    textFr = """Bonjour {},
 
-Hardcode the French translation here then copy formatting"""
-    message = text + "\n\n" + textFr
+
+Vous avez été jumelés pour une causerie virtuelle. Nous vous recommandons d’utiliser MS Teams 
+pendant les heures normales de travail pour discuter environ 10 minutes, mais c’est à vous de décider 
+de la manière de procéder.
+
+Le groupe préfère discuter en {} à {}. Vous travaillez dans le {}, respectivement.
+
+Comme il s’agit d’une version bêta, nous vous invitons à communiquer avec le coordonnateur de 
+l’innovation de Statistique Canada (<username>@<email domain>) 
+si vous avez des commentaires, des questions et des suggestions. Nous vous remercions de participer aux 
+causeries virtuelles de Statistique Canada.
+
+
+Bien cordialement,
+
+L’Équipe des causeries virtuelles de Statistique Canada 
+
+Secrétariat de l’innovation""".format(', '.join(mgName[i]) if len(mgName[i]) > 2 else ' '.join(mgName[i]), 
+                                 matchGroups[i].iat[0, 2], 
+                                 matchGroups[i].iat[0, 3], 
+                                 ', '.join(mgField[i]) if len(mgField[i]) > 2 else ' '.join(mgField[i]))
+    
+    message = text + "\n\n\n" + textFr
      # Add the group message to the matched group message list
     mgMsgList.append(message)
     print(mgMsgList[i])
@@ -354,7 +385,7 @@ mgRecList = [', '.join(rec) for rec in mgEmail]
 
 #You will be notified by email when there has been a match. Would you still like to meet new people?
 #If yes, please contact the Innovation Coordinator at 
-#<username>@<email>""".format(nomatchGroups[i].iat[0,1])
+#statcan.innovationcoordinator-coorddelinnovation.statcan@canada.ca""".format(nomatchGroups[i].iat[0,1])
          
     # Add the group message to the matched group message list
 #    nmgMsgList.append(body)

@@ -27,6 +27,22 @@ from IPython.display import display
 import win32com.client as win32
 # look into accessing google sheet directly with python (https://www.twilio.com/blog/2017/02/an-easy-way-to-read-and-write-to-a-google-spreadsheet-in-python.html)
 
+# Create a English-French dictionary
+engDict = {
+    "English": "Anglais",
+    "French": "Français",
+    "Morning": "Matin",
+    "Afternoon": "Après-midi",
+    "Field 1 - Office of the Chief Statistician": "Secteur 1 - Bureau du Statisticien en Chef",
+    "Field 3 - Corporate Strategy and Management": "Secteur 3 - Stratégies et Gestion Intégrées",
+    "Field 4 - Strategic Engagement": "Secteur 4 - Engagement Stratégique",
+    "Field 5 - Economics Statistics": "Secteur 5 - Statistiques Économique",
+    "Field 6 - Strategic Data Management, Methods, and Analysis": "Secteur 6 - Gestion Stratégique des Données, Méthodes et Analyse",
+    "Field 7 - Census, Regional Services, and Operations": "Secteur 7 - Recensement, Services Régionaux, et Opérations",
+    "Field 8 - Social Health and Labour Statistics": "Secteur 8 - Statistiques Sociale, de la Santé et du Travail",
+    "Field 9 - Digital Solutions": "Secteur 9 - Solutions Numériques",
+}
+
 # Read the translated, combined responses csv file skipping the column header row.
 df = pd.read_csv("testData.csv")
 
@@ -69,7 +85,7 @@ for r in range(len(df)):
     if ((dfCopy1.iat[r, 2] == "English") or (dfCopy1.iat[r, 2] == "No preference")):
         # Assign English
         dfCopy1.iat[r, 2] = "English"
-    
+
     # Process Time Preference column such that Morning and No Preference match
     # If Time Preference column value is Morning) or No Preference
     if ((dfCopy1.iat[r, 3] == "Morning") or (dfCopy1.iat[r, 3] == "No preference")):
@@ -88,7 +104,7 @@ for r in range(len(df)):
     if ((dfCopy2.iat[r, 3] == "Afternoon") or (dfCopy2.iat[r, 3] == "No preference")):
         # Assign Afternoon
         dfCopy2.iat[r, 3] = "Afternoon"
-    
+
     """Update of dfCopy3"""
     # Process Language column such that French and No Preference match
     # If Language column value is French or No Preference
@@ -101,7 +117,7 @@ for r in range(len(df)):
     if ((dfCopy3.iat[r, 3] == "Morning") or (dfCopy3.iat[r, 3] == "No preference")):
         # Assign Morning
         dfCopy3.iat[r, 3] = "Morning"
-    
+
     """Update of dfCopy4"""
     # Process Language column such that French and No Preference match
     # If Language column value is 1 (French) or No Preference (2)
@@ -114,7 +130,7 @@ for r in range(len(df)):
     if ((dfCopy4.iat[r, 3] == "Afternoon") or (dfCopy4.iat[r, 3] == "No Preference")):
         # Assign Afternoon
         dfCopy4.iat[r, 3] = "Afternoon"
-    
+
 # See updated copies of df
 display(dfCopy1)
 display(dfCopy2)
@@ -211,13 +227,13 @@ for i in range(len(matchGroups)):
     mgEmail.append(matchGroups[i]['Email'].tolist())
     mgName.append(matchGroups[i]['Preferred Name'].tolist())
     mgField.append(matchGroups[i]['Field'].tolist())
-    
+
     # Add the word "and" to the last element in mgName
     mgName[i][-1] = "and " + mgName[i][-1]
-    
+
     # Add the word "and" to the last element in mgField
     mgField[i][-1] = "and " + mgField[i][-1]
-    
+
     # Body text of email (matches)
     text = """Hello {}
 
@@ -226,19 +242,17 @@ You have been matched together for a Virtual Watercooler conversation. We recomm
 Teams scheduled during regular business hours for a conversation of at about 10 minutes but it is up to 
 you to decide how to proceed.
 
-The group's preferences are {} and {}. Your field of work is {}, respectively.
+The group preferd to chat in {} in the {}. You work in {}, respectively.
 
 As this is our beta version so please reach out to Innovation Coordinator / Coord de l'innovation 
 (STATCAN) <username>@<email domain> with all of your 
-feedback, questions and suggestions. Thank you for using the StatCan Virtual Watercooler. 
+feedback, questions and suggestions. Thank you for using the StatCan Virtual Watercooler.
 
 
 
-Sincerely, 
+Sincerely,
 
-
-
-The StatCan Virtual Watercooler Team 
+The StatCan Virtual Watercooler Team
 
 Innovation Secretariat""".format(', '.join(mgName[i]) if len(mgName[i]) > 2 else ' '.join(mgName[i]), 
                                  matchGroups[i].iat[0, 2], 
@@ -248,18 +262,53 @@ Innovation Secretariat""".format(', '.join(mgName[i]) if len(mgName[i]) > 2 else
     # names per match group into string, take the first row's language (since they're all the same), 
     # take the first row's time preference (since they're all the same), convert list of fields per 
     # match group into string
-        
-    # French version
-    # Replace the word "and" with "et" in the last element of mgName
-    mgName[i][-1] = mgName[i][-1].replace("and", "et")
-    
-    # Replace the word "and" with "et" in the last element of mgName
-    mgField[i][-1] = mgField[i][-1].replace("and", "et")
-    
-    textFr = """Bonjour {}, 
 
-Hardcode the French translation here then copy formatting"""
-    message = text + "\n\n" + textFr
+    # French version
+    # Remove the word "and" in the last element of mgName
+    mgName[i][-1] = mgName[i][-1].replace("and ", "")
+
+    # Replace the word "and" in the last element of mgField
+    mgField[i][-1] = mgField[i][-1].replace("and ", "")
+    
+    # Map the values for Language, Time Preference, and Field to their dictionary values (Translate English to French)
+    matchGroups[i].iat[0, 2] = engDict.get(matchGroups[i].iat[0, 2])
+    matchGroups[i].iat[0, 3] = engDict.get(matchGroups[i].iat[0, 3])
+    
+    for f in range(len(mgField[i])):
+        mgField[i][f] = engDict.get(mgField[i][f])
+    
+   # Add the word "et" to the last element in mgName
+    mgName[i][-1] = "et " + mgName[i][-1]
+
+    # Add the word "and" to the last element in mgField
+    mgField[i][-1] = "et " + mgField[i][-1]
+    
+    # French translation of the email
+    textFr = """Bonjour {},
+
+
+Vous avez été jumelés pour une causerie virtuelle. Nous vous recommandons d’utiliser MS Teams 
+pendant les heures normales de travail pour discuter environ 10 minutes, mais c’est à vous de décider 
+de la manière de procéder.
+
+Le groupe préfère discuter en {} à {}. Vous travaillez dans le {}, respectivement.
+
+Comme il s’agit d’une version bêta, nous vous invitons à communiquer avec le coordonnateur de 
+l’innovation de Statistique Canada (<username>@<email domain>) 
+si vous avez des commentaires, des questions et des suggestions. Nous vous remercions de participer aux 
+causeries virtuelles de Statistique Canada.
+
+
+Bien cordialement,
+
+L’Équipe des causeries virtuelles de Statistique Canada 
+
+Secrétariat de l’innovation""".format(', '.join(mgName[i]) if len(mgName[i]) > 2 else ' '.join(mgName[i]), 
+                                 matchGroups[i].iat[0, 2], 
+                                 matchGroups[i].iat[0, 3], 
+                                 ', '.join(mgField[i]) if len(mgField[i]) > 2 else ' '.join(mgField[i]))
+    
+    message = text + "\n\n\n" + textFr
      # Add the group message to the matched group message list
     mgMsgList.append(message)
     print(mgMsgList[i])
@@ -293,7 +342,7 @@ mgRecList = [', '.join(rec) for rec in mgEmail]
 
 #You will be notified by email when there has been a match. Would you still like to meet new people?
 #If yes, please contact the Innovation Coordinator at 
-#<username>@<email domain>""".format(nomatchGroups[i].iat[0,1])
+#statcan.innovationcoordinator-coorddelinnovation.statcan@canada.ca""".format(nomatchGroups[i].iat[0,1])
          
     # Add the group message to the matched group message list
 #    nmgMsgList.append(body)
