@@ -1,0 +1,17 @@
+Email,Preferred Name,Language,Time Preference,Field,Only Within Field,Interests
+a@a.ca,a,English,Morning,Field 5,Yes,"a,b,c"
+a@a.ca,b,French,Morning,Field 5,Yes,"a,b,c"
+a@a.ca,c,English,Afternoon,Field 5,Yes,"a,b,c"
+a@a.ca,d,French,Afternoon,Field 5,Yes,"a,b,c"
+a@a.ca,e,English,Morning,Field 5,No,"a,b,c"
+a@a.ca,f,French,Morning,Field 5,No,"a,b,c"
+a@a.ca,g,English,Afternoon,Field 5,No,"a,b,c"
+a@a.ca,h,French,Afternoon,Field 5,No,"a,b,c"
+a@a.ca,i,No preference,Morning,Field 9,Yes,"a,b,c,d"
+a@a.ca,j,No preference,Afternoon,Field 5,No,"a,b,c"
+a@a.ca,k,No preference,No preference,Field 5,Yes,"a,b"
+a@a.ca,l,No preference,No preference,Field 9,No,"b,c,d,e"
+a@a.ca,m,English,Morning,Field 5,Yes,"a,b"
+a@a.ca,n,French,Morning,Field 5,Yes,"a,b,c,d"
+a@a.ca,o,English,Afternoon,Field 5,Yes,e
+a@a.ca,p,French,Afternoon,Field 5,Yes,"b,c,e"
