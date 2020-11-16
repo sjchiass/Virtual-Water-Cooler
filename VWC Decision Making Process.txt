@@ -1,0 +1,257 @@
+Language: English, French, No preference
+Time: Morning, Afternoon, No preference
+Field: 1, 3, 4, 5, 6, 7, 8, 9
+Only Within Field: Yes, No
+
+All Possible Combinations
+
+English,Morning,Field 1 - Office of the Chief Statistician,Yes
+English,Morning,Field 1 - Office of the Chief Statistician,No
+English,Morning,Field 3 - Corporate Strategy and Management,Yes
+English,Morning,Field 3 - Corporate Strategy and Management,No
+English,Morning,Field 4 - Strategic Engagement,Yes
+English,Morning,Field 4 - Strategic Engagement,No
+English,Morning,Field 5 - Economics Statistics,Yes
+English,Morning,Field 5 - Economics Statistics,No
+English,Morning,"Field 6 - Strategic Data Management, Methods, and Analysis",Yes
+English,Morning,"Field 6 - Strategic Data Management, Methods, and Analysis",No
+English,Morning,"Field 7 - Census, Regional Services, and Operations",Yes
+English,Morning,"Field 7 - Census, Regional Services, and Operations",No
+English,Morning,Field 8 - Social Health and Labour Statistics,Yes
+English,Morning,Field 8 - Social Health and Labour Statistics,Yes
+English,Morning,Field 9 - Digital Solutions,No
+English,Morning,Field 9 - Digital Solutions,Yes
+English,Afternoon,Field 1 - Office of the Chief Statistician,No
+English,Afternoon,Field 1 - Office of the Chief Statistician,Yes
+English,Afternoon,Field 3 - Corporate Strategy and Management,No
+English,Afternoon,Field 3 - Corporate Strategy and Management,Yes
+English,Afternoon,Field 4 - Strategic Engagement,No
+English,Afternoon,Field 4 - Strategic Engagement,Yes
+English,Afternoon,Field 5 - Economics Statistics,No
+English,Afternoon,Field 5 - Economics Statistics,Yes
+English,Afternoon,"Field 6 - Strategic Data Management, Methods, and Analysis",Yes
+English,Afternoon,"Field 6 - Strategic Data Management, Methods, and Analysis",No
+English,Afternoon,"Field 7 - Census, Regional Services, and Operations",Yes
+English,Afternoon,"Field 7 - Census, Regional Services, and Operations",No
+English,Afternoon,Field 8 - Social Health and Labour Statistics,Yes
+English,Afternoon,Field 8 - Social Health and Labour Statistics,No
+English,Afternoon,Field 9 - Digital Solutions,Yes
+English,Afternoon,Field 9 - Digital Solutions,No
+English,No preference,Field 1 - Office of the Chief Statistician,Yes
+English,No preference,Field 1 - Office of the Chief Statistician,No
+English,No preference,Field 3 - Corporate Strategy and Management,Yes
+English,No preference,Field 3 - Corporate Strategy and Management,No
+English,No preference,Field 4 - Strategic Engagement,Yes
+English,No preference,Field 4 - Strategic Engagement,Yes
+English,No preference,Field 5 - Economics Statistics,No
+English,No preference,Field 5 - Economics Statistics,Yes
+English,No preference,"Field 6 - Strategic Data Management, Methods, and Analysis",No
+English,No preference,"Field 6 - Strategic Data Management, Methods, and Analysis",Yes
+English,No preference,"Field 7 - Census, Regional Services, and Operations",No
+English,No preference,"Field 7 - Census, Regional Services, and Operations",Yes
+English,No preference,Field 8 - Social Health and Labour Statistics,Yes
+English,No preference,Field 8 - Social Health and Labour Statistics,No
+English,No preference,Field 9 - Digital Solutions,Yes
+English,No preference,Field 9 - Digital Solutions,No
+French,Morning,Field 1 - Office of the Chief Statistician,Yes
+French,Morning,Field 1 - Office of the Chief Statistician,No
+French,Morning,Field 3 - Corporate Strategy and Management,Yes
+French,Morning,Field 3 - Corporate Strategy and Management,No
+French,Morning,Field 4 - Strategic Engagement,Yes
+French,Morning,Field 4 - Strategic Engagement,No
+French,Morning,Field 5 - Economics Statistics,Yes
+French,Morning,Field 5 - Economics Statistics,No
+French,Morning,"Field 6 - Strategic Data Management, Methods, and Analysis",Yes
+French,Morning,"Field 6 - Strategic Data Management, Methods, and Analysis",Yes
+French,Morning,"Field 7 - Census, Regional Services, and Operations",No
+French,Morning,"Field 7 - Census, Regional Services, and Operations",Yes
+French,Morning,Field 8 - Social Health and Labour Statistics,No
+French,Morning,Field 8 - Social Health and Labour Statistics,Yes
+French,Morning,Field 9 - Digital Solutions,No
+French,Morning,Field 9 - Digital Solutions,Yes
+French,Afternoon,Field 1 - Office of the Chief Statistician,No
+French,Afternoon,Field 1 - Office of the Chief Statistician,Yes
+French,Afternoon,Field 3 - Corporate Strategy and Management,No
+French,Afternoon,Field 3 - Corporate Strategy and Management,Yes
+French,Afternoon,Field 4 - Strategic Engagement,Yes
+French,Afternoon,Field 4 - Strategic Engagement,No
+French,Afternoon,Field 5 - Economics Statistics,Yes
+French,Afternoon,Field 5 - Economics Statistics,No
+French,Afternoon,"Field 6 - Strategic Data Management, Methods, and Analysis",Yes
+French,Afternoon,"Field 6 - Strategic Data Management, Methods, and Analysis",No
+French,Afternoon,"Field 7 - Census, Regional Services, and Operations",Yes
+French,Afternoon,"Field 7 - Census, Regional Services, and Operations",No
+French,Afternoon,Field 8 - Social Health and Labour Statistics,Yes
+French,Afternoon,Field 8 - Social Health and Labour Statistics,No
+French,Afternoon,Field 9 - Digital Solutions,Yes
+French,Afternoon,Field 9 - Digital Solutions,No
+French,No preference,Field 1 - Office of the Chief Statistician,Yes
+French,No preference,Field 1 - Office of the Chief Statistician,Yes
+French,No preference,Field 3 - Corporate Strategy and Management,No
+French,No preference,Field 3 - Corporate Strategy and Management,Yes
+French,No preference,Field 4 - Strategic Engagement,No
+French,No preference,Field 4 - Strategic Engagement,Yes
+French,No preference,Field 5 - Economics Statistics,No
+French,No preference,Field 5 - Economics Statistics,Yes
+French,No preference,"Field 6 - Strategic Data Management, Methods, and Analysis",Yes
+French,No preference,"Field 6 - Strategic Data Management, Methods, and Analysis",No
+French,No preference,"Field 7 - Census, Regional Services, and Operations",Yes
+French,No preference,"Field 7 - Census, Regional Services, and Operations",No
+French,No preference,Field 8 - Social Health and Labour Statistics,Yes
+French,No preference,Field 8 - Social Health and Labour Statistics,No
+French,No preference,Field 9 - Digital Solutions,Yes
+French,No preference,Field 9 - Digital Solutions,No
+No preference,Morning,Field 1 - Office of the Chief Statistician,Yes
+No preference,Morning,Field 1 - Office of the Chief Statistician,No
+No preference,Morning,Field 3 - Corporate Strategy and Management,Yes
+No preference,Morning,Field 3 - Corporate Strategy and Management,No
+No preference,Morning,Field 4 - Strategic Engagement,Yes
+No preference,Morning,Field 4 - Strategic Engagement,Yes
+No preference,Morning,Field 5 - Economics Statistics,No
+No preference,Morning,Field 5 - Economics Statistics,Yes
+No preference,Morning,"Field 6 - Strategic Data Management, Methods, and Analysis",No
+No preference,Morning,"Field 6 - Strategic Data Management, Methods, and Analysis",Yes
+No preference,Morning,"Field 7 - Census, Regional Services, and Operations",No
+No preference,Morning,"Field 7 - Census, Regional Services, and Operations",Yes
+No preference,Morning,Field 8 - Social Health and Labour Statistics,No
+No preference,Morning,Field 8 - Social Health and Labour Statistics,Yes
+No preference,Morning,Field 9 - Digital Solutions,No
+No preference,Morning,Field 9 - Digital Solutions,Yes
+No preference,Afternoon,Field 1 - Office of the Chief Statistician,Yes
+No preference,Afternoon,Field 1 - Office of the Chief Statistician,No
+No preference,Afternoon,Field 3 - Corporate Strategy and Management,Yes
+No preference,Afternoon,Field 3 - Corporate Strategy and Management,No
+No preference,Afternoon,Field 4 - Strategic Engagement,Yes
+No preference,Afternoon,Field 4 - Strategic Engagement,No
+No preference,Afternoon,Field 5 - Economics Statistics,Yes
+No preference,Afternoon,Field 5 - Economics Statistics,No
+No preference,Afternoon,"Field 6 - Strategic Data Management, Methods, and Analysis",Yes
+No preference,Afternoon,"Field 6 - Strategic Data Management, Methods, and Analysis",No
+No preference,Afternoon,"Field 7 - Census, Regional Services, and Operations",Yes
+No preference,Afternoon,"Field 7 - Census, Regional Services, and Operations",No
+No preference,Afternoon,Field 8 - Social Health and Labour Statistics,Yes
+No preference,Afternoon,Field 8 - Social Health and Labour Statistics,Yes
+No preference,Afternoon,Field 9 - Digital Solutions,No
+No preference,Afternoon,Field 9 - Digital Solutions,Yes
+No preference,No preference,Field 1 - Office of the Chief Statistician,No
+No preference,No preference,Field 1 - Office of the Chief Statistician,Yes
+No preference,No preference,Field 3 - Corporate Strategy and Management,No
+No preference,No preference,Field 3 - Corporate Strategy and Management,Yes
+No preference,No preference,Field 4 - Strategic Engagement,Yes
+No preference,No preference,Field 4 - Strategic Engagement,No
+No preference,No preference,Field 5 - Economics Statistics,Yes
+No preference,No preference,Field 5 - Economics Statistics,No
+No preference,No preference,"Field 6 - Strategic Data Management, Methods, and Analysis",Yes
+No preference,No preference,"Field 6 - Strategic Data Management, Methods, and Analysis",No
+No preference,No preference,"Field 7 - Census, Regional Services, and Operations",Yes
+No preference,No preference,"Field 7 - Census, Regional Services, and Operations",No
+No preference,No preference,Field 8 - Social Health and Labour Statistics,Yes
+No preference,No preference,Field 8 - Social Health and Labour Statistics,No
+No preference,No preference,Field 9 - Digital Solutions,Yes
+No preference,No preference,Field 9 - Digital Solutions,No
+
+Total Number of Combinations = 3*3*8*2 = 144
+
+Decision Making Process for Virtual Water Cooler
+
+Match People Who Said Yes to Only Within Field
+  - Select everyone who said Yes
+    # Can we find a match within people who said yes?
+    - Group them by field
+	  - For each group
+		- If the groups' length > 1
+		  - Check the first person's (in the list) language preference
+	        - If English
+	          - Find everyone who speaks English or No preference; return this group
+	        - Else if French
+	          - Find everyone who speaks French or No preference; return this group
+	        - Else (No preference)
+	          - pass (Do nothing - keep the same group)
+
+		  - From the language preference group
+		  - Check their time preference
+			- If Morning
+			  - Find everyone who said Morning or No preference
+			- Else if Afternoon
+			  - Find everyone who said Afternoon or No preference
+			- Else (No preference)
+			  - pass (Do nothing - keep the same group)
+				
+		  - From the time preference group
+		  - Randomize the group (shuffle)
+		    - If groups' length % 2 == 0 (even)
+			  - Make pairs
+			  - Add them to the list of matches
+			  - Remove them from the list of people who said yes
+			  - Update (remove the pair(s) from) the data (frame)
+			- Else (odd)
+			  - Make pairs with everyone but the last person (this means they can still be matched with people who said No)
+			  - Add them to the list of matches
+			  - Remove them from the list of people who said yes
+			  - Update (remove the pair(s) from) the data (frame)
+		- Else (there is only 1 person in these groups within people who said yes)
+		  - pass (Do nothing - keep the same group)
+	
+  # Match people who said Yes and still haven't been matched yet
+  - If people who said Yes > 0 (there are still people who haven't been matched)
+    - Group the existing data by field
+	- Select the groups with people who said Yes
+	- For each group
+	  - If group's length > 1
+	    - Check their language preference
+	      - If English
+	        - Find everyone who speaks English or No preference; return this group
+	      - Else if French
+	        - Find everyone who speaks French or No preference; return this group
+	      - Else (No preference)
+	        - pass (Do nothing - keep the same group)
+
+	    - From the language preference group
+		  - Check their time preference
+		    - If Morning
+			  - Find everyone who said Morning or No preference
+		    - Else if Afternoon
+			  - Find everyone who said Afternoon or No preference
+		    - Else (No preference)
+			  - pass (Do nothing - keep the same group)
+				
+	    - From the time preference group
+		  - Select the person who said Yes
+		  - Randomly select someone else
+		  - Add the pair to the list of matches
+		  - Remove them from the list of people who said yes
+		  - Update (remove the pair from) the data (frame)
+	  - Else
+		- Add the person to the list of no matches
+		- Remove them from the list of people who said yes
+		- Update (remove the person from) the data (frame)
+
+Match Everyone Else (The last column now becomes irrelevant)
+Strategy: Take the first person and pair them up, add them to the match list, update the data frame
+
+  - If the existing data > 1
+    - Check their (the first person) language preference
+	   - If English
+	      - Find everyone who speaks English or No preference; return this group
+	   - Else if French
+	       - Find everyone who speaks French or No preference; return this group
+	   - Else (No preference)
+	       - pass (Do nothing - keep the same group)
+
+	- From the language preference group
+	- Check their time preference
+	  - If Morning
+		- Find everyone who said Morning or No preference
+	  - Else if Afternoon
+		- Find everyone who said Afternoon or No preference
+	  - Else (No preference)
+		- pass (Do nothing - keep the same group)
+
+	- From the time preference group
+	  - Select the person in the first row of the data frame
+	  - Randomly select someone else
+	  - Add the pair to the list of matches
+	  - Remove them from the list of people who said yes
+	  - Update (remove the pair from) the data (frame)
+  - Else (there is only 1 person in the data frame)
+	- Add this person to the no matches list
