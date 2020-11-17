@@ -8,7 +8,7 @@
 #!pip install pywin32
 
 
-# In[113]:
+# In[1]:
 
 
 """Initialization"""
@@ -25,7 +25,7 @@ matches = []
 noMatches = []
 
 
-# In[114]:
+# In[2]:
 
 
 """Load the Data"""
@@ -48,7 +48,7 @@ display(df)
 dfCopy = df.copy()
 
 
-# In[125]:
+# In[3]:
 
 
 """Helper Functions"""
@@ -144,7 +144,7 @@ def tGroup(t, df):
 
 
 
-# In[116]:
+# In[4]:
 
 
 """Create Groups of People Who Said Yes to Only Within Field"""
@@ -158,7 +158,7 @@ display(yPeople)
 yOWF = groupby(yPeople, 'Which field are you in?')
 
 
-# In[129]:
+# In[5]:
 
 
 """Match People Who Said Yes to Only Within Field to Other People who said Yes"""
@@ -191,7 +191,7 @@ for g in range(len(yOWF)):
         yOWF[g] = yOWF[g].drop(yOWF[g].iloc[[0]].index)
         
         # Remove the person from the yPeople list
-        yPeople = yPeople.drop([0])
+        yPeople = yPeople.drop(yOWF[g].iloc[[0]].index)
         
         # Remove the person from the data
         dfCopy = dfCopy.drop(yOWF[g].iloc[[0]].isin(dfCopy).index)
@@ -219,7 +219,7 @@ for g in range(len(yOWF)):
     pass
 
 
-# In[130]:
+# In[6]:
 
 
 """Match People Who Said Yes & Still Haven't Been Matched Yet"""
@@ -299,7 +299,7 @@ if (len(yPeople) > 0):
 display(dfCopy)
 
 
-# In[131]:
+# In[7]:
 
 
 for i in range(len(matches)):
