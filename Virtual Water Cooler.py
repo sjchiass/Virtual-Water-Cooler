@@ -8,7 +8,7 @@
 #!pip install pywin32
 
 
-# In[1]:
+# In[ ]:
 
 
 """Initialization"""
@@ -26,29 +26,6 @@ noMatches = []
 
 
 # In[2]:
-
-
-"""Load the Data"""
-# Read the translated, combined responses csv file skipping the column header row.
-df = pd.read_csv("dataBeta.csv")
-
-# Remove the Interest column (In Beta Mode)
-df = df.iloc[:, :6]
-
-"""
-# For each row in the dataframe in the Interests column, make the list a frozenset
-for i in range(len(df)):
-    df.iat[i, 6] = frozenset(df.iat[i, 6].split(','))
-"""
-
-# Print df
-display(df)
-
-# Make a copy of df
-dfCopy = df.copy()
-
-
-# In[3]:
 
 
 """Helper Functions"""
@@ -144,7 +121,30 @@ def tGroup(t, df):
 
 
 
-# In[4]:
+# In[70]:
+
+
+"""Load the Data"""
+# Read the translated, combined responses csv file skipping the column header row.
+df = pd.read_csv("dataBeta.csv")
+
+# Remove the Interest column (In Beta Mode)
+df = df.iloc[:, :6]
+
+"""
+# For each row in the dataframe in the Interests column, make the list a frozenset
+for i in range(len(df)):
+    df.iat[i, 6] = frozenset(df.iat[i, 6].split(','))
+"""
+
+# Print df
+display(df)
+
+# Make a copy of df
+dfCopy = df.copy()
+
+
+# In[71]:
 
 
 """Create Groups of People Who Said Yes to Only Within Field"""
@@ -158,25 +158,22 @@ display(yPeople)
 yOWF = groupby(yPeople, 'Which field are you in?')
 
 
-# In[5]:
+# In[72]:
 
 
-"""Match People Who Said Yes to Only Within Field to Other People who said Yes"""
+"""Match People Who Said Yes to Only Within Field to Other People Who said Yes"""
 # For each group in yOWF
 for g in range(len(yOWF)):
     
     # Display the groups
     display(yOWF[g])
     
+    # Add the first person to the pair
+    pair = yOWF[g].iloc[[0]]
+    
     # Make all the possible pairs per group until there's only one left
     # while the length of the group is greater than 1
     while (len(yOWF[g]) > 1):
-        
-        # Create an empty list to store a pair of people (will be cleared each time)
-        pair = []
-        
-        # Add the first person to the pair
-        pair.append(yOWF[g].iloc[[0]])
         
         # Group by language
         lang = langGroup(yOWF[g].iat[0, 2], yOWF[g])
@@ -184,45 +181,51 @@ for g in range(len(yOWF)):
         # Group by time
         t = tGroup(yOWF[g].iat[0, 3], lang)
         
-        # Remove the person from the t group
-        t = t.drop(yOWF[g].iloc[[0]].isin(t).index)
+        # If after filtering the group is greater than one
+        if (len(t) > 1):
+            # Remove the person from the t group
+            t = t.drop(pair.isin(t).index)
+
+            # Remove the person from the group
+            yOWF[g] = yOWF[g].drop(pair.index)
+
+            # Remove the person from the yPeople list
+            yPeople = yPeople.drop(pair.isin(yPeople).index)
+
+            # Remove the person from the data
+            dfCopy = dfCopy.drop(pair.isin(dfCopy).index)
+
+            # Shuffle the rows (Random match)
+            t = t.sample(frac = 1)
+
+            # Add the first person in the shuffled group to the pair
+            pair = pair.append(t.iloc[[0]], ignore_index = True)
+
+            # Remove the person from the group
+            yOWF[g] = yOWF[g].drop(t.iloc[[0]].index)
+
+            # Remove the person from the yPeople list
+            yPeople = yPeople.drop(t.iloc[[0]].isin(yPeople).index)
+
+            # Remove the person from the data
+            dfCopy = dfCopy.drop(t.iloc[[0]].isin(dfCopy).index)
+
+            # Add the pair to the matches list
+            matches.append(pair)
+            
+        # Else there is only 1 person (left) in these groups within people who said yes
+        else:
+            # Do nothing. Exit the while loop
+            break
         
-        # Remove the person from the group
-        yOWF[g] = yOWF[g].drop(yOWF[g].iloc[[0]].index)
-        
-        # Remove the person from the yPeople list
-        yPeople = yPeople.drop(yOWF[g].iloc[[0]].index)
-        
-        # Remove the person from the data
-        dfCopy = dfCopy.drop(yOWF[g].iloc[[0]].isin(dfCopy).index)
-        
-        # Shuffle the rows (Random match)
-        t = t.sample(frac = 1)
-        
-        # Add the first person in the shuffled group to the pair
-        pair.append(t.iloc[[0]])
-
-        # Remove the person from the group
-        yOWF[g] = yOWF[g].drop(t.iloc[[0]].index)
-
-        # Remove the person from the yPeople list
-        yPeople = yPeople.drop(t.iloc[[0]].isin(yPeople).index)
-
-        # Remove the person from the data
-        dfCopy = dfCopy.drop(t.iloc[[0]].isin(dfCopy).index)
-        
-        # Add the pair to the matches list
-        matches.append(pair)
-
-    # There is only 1 person (left) in these groups within people who said yes
-    # Do nothing
-    pass
+    # Clear the pair
+    pair = pair[0:0]
 
 
-# In[6]:
+# In[83]:
 
 
-"""Match People Who Said Yes & Still Haven't Been Matched Yet"""
+"""Select the Groups People Who Said Yes & Still Haven't Been Matched Yet"""
 # If the number of people who said yes is greater than 0
 if (len(yPeople) > 0):
     
@@ -236,73 +239,159 @@ if (len(yPeople) > 0):
     for g in range(len(yOWF)):
         if ("Yes" in yOWF[g]['Do you want to be matched ONLY WITHIN your field?'].unique()):
             yGroups.append(yOWF[g])
-    
-    # For each remaining person in yPeople
-    for i in range(len(yPeople)):
-
-        # Print the groups
-        display(yGroups[i])
-        
-        # if the length of the group is greater than 1
-        if (len(yGroups[i]) > 1):
-
-            # Create an empty list to store a pair of people (will be cleared each time)
-            pair = []
-
-            # Create a variable to store the person who said yes
-            yPerson = yGroups[i].loc[yGroups[i]['Do you want to be matched ONLY WITHIN your field?'] == "Yes"]
             
-            # Add the person who said yes into the pair (change this to be row concatenate with row)
-            pair.append(yPerson)
+for i in range(len(yGroups)):
+    # Print the groups
+    display(yGroups[i])
 
+
+# In[84]:
+
+
+"""Match People Who Said Yes & Still Haven't Been Matched Yet"""
+# For each group
+for i in range(len(yGroups)):
+
+    # Create a data frame per group of all the people who said Yes
+    yPersons = yGroups[i].loc[yGroups[i]['Do you want to be matched ONLY WITHIN your field?'] == "Yes"]
+    """REMOVE EVERYONE WHO SAID YES FROM THE GROUP"""
+    # Remove everyone who said yes in each group 
+    yGroups[i].drop(yPersons.index)
+    
+    # Make all the possible pairs per group with people who said yes until there's only one left
+    # while there is more than 0 persons who said yes
+    while (len(yPersons) > 0):
+        
+        # Add the first person to the pair
+        pair = yPersons.iloc[[0]]
+        
+        # If the length of the group is greater than 1
+        if (len(yGroups[i]) > 1):
+            
             # Group by language
-            lang = langGroup(yPerson.iat[0, 2], yGroups[i])
+            lang = langGroup(pair.iat[0, 2], yGroups[i])
 
             # Group by time
-            t = tGroup(yPerson.iat[0, 3], lang)
+            t = tGroup(pair.iat[0, 3], lang)
 
-            # Remove the person from the t group
-            t = t.drop(yPerson.isin(t).index)
+            # If after filtering the group is greater than one
+            if (len(t) > 1):
+                
+                # Remove the person from the t group
+                t = t.drop(pair.isin(t).index)
+                
+                display(t)
+                
+                # Remove the person from the group
+                yGroups[i] = yGroups[i].drop(pair.index)
+                
+                display(yGroups[i])
+                
+                # Remove the person from yPerson list
+                yPersons = yPersons.drop(pair.isin(yPersons).index)
+                
+                display(yPersons)
+                print(len(yPersons))
+                
+            # Else there is only 1 person (left) in these groups within people who said yes
+            else:
+                yPersons = yPersons.drop(pair.isin(yPersons).index)
+                display(yPersons)
+                print("User number 19")
+        else:
+            print("User number 19")
+        
+        pair = pair[0:0]
+"""   
+    # while there is more than 0 persons who said yes
+    while (len(yPersons) > 0):
+        
+        # If the length of the group is greater than 1
+        if (len(yGroups[i]) > 1):
+            
+            # Group by language
+            lang = langGroup(pair.iat[0, 2], yGroups[i])
 
-            # Remove the person from the group
-            yGroups[i] = yGroups[i].drop(yPerson.index)
+            # Group by time
+            t = tGroup(pair.iat[0, 3], lang)
+
+            # If after filtering the group is greater than one
+            if (len(t) > 1):
+                # Remove the person from the t group
+                t = t.drop(pair.isin(t).index)
+
+                # Remove the person from the group
+                yGroups[i] = yGroups[i].drop(pair.index)
+
+                # Remove the person from the yPerson list
+                yPersons = yPersons.drop(pair.isin(yPersons).index)
+
+                # Remove the person from the yPeople list
+                yPeople = yPeople.drop(pair.isin(yPeople).index)
+
+                # Remove the person from the data
+                dfCopy = dfCopy.drop(pair.isin(dfCopy).index)
+
+                # Shuffle the rows (Random match)
+                t = t.sample(frac = 1)
+
+                # Add the first person in the shuffled group to the pair
+                pair = pair.append(t.iloc[[0]], ignore_index = True)
+
+                # Remove the person from the group
+                yGroups[i] = yGroups[i].drop(t.iloc[[0]].index)
+
+                # Remove the person from the data
+                dfCopy = dfCopy.drop(t.iloc[[0]].isin(dfCopy).index)
+
+                # Add the pair to the matches list
+                matches.append(pair)
+
+            # Else there is only 1 person (left) in these groups within people who said yes
+            else:
+                # Add this person to the list of no matches
+                noMatches.append(pair)
+
+                # Remove the person from the yPersons list
+                yPersons = yPersons.drop(pair.isin(yPersons).index)
+
+                # Remove the person from the yPeople list
+                yPeople = yPeople.drop(pair.isin(yPeople).index)
+
+                # Remove the person from the data
+                dfCopy = dfCopy.drop(pair.isin(dfCopy).index)
+                
+        # Else there is only 1 person (left) in these groups within people who said yes
+        else:
+            # Add this person to the list of no matches
+            noMatches.append(pair)
+
+            # Remove the person from the yPersons list
+            yPersons = yPersons.drop(pair.isin(yPersons).index)
 
             # Remove the person from the yPeople list
-            yPeople = yPeople.drop(yPerson.isin(yPeople).index)
+            yPeople = yPeople.drop(pair.isin(yPeople).index)
 
             # Remove the person from the data
-            dfCopy= dfCopy = dfCopy.drop(yPerson.isin(dfCopy).index)
+            dfCopy = dfCopy.drop(pair.isin(dfCopy).index)
 
-            # Shuffle the rows (Random match)
-            t = t.sample(frac = 1)
-            
-            # Create a variable to store the person in the shuffled group
-            first = t.iloc[[0]]
-            
-            # Add the first person in the shuffled group to the pair
-            pair.append(first)
-
-            # Remove the person from the group
-            yGroups[i] = yGroups[i].drop(first.index)
-
-            # Remove the person from the data
-            dfCopy = dfCopy.drop(first.isin(dfCopy).index)
-
-            # Add the pair to the matches list
-            matches.append(pair)
-
-        # There is only 1 person (left) in these groups within people who said yes
-        # Do nothing
-        pass
-
+        # Clear the pair variable
+        pair = pair[0:0]   
+"""
 # Print updated dfCopy
 display(dfCopy)
 
 
-# In[7]:
+# In[ ]:
 
 
 for i in range(len(matches)):
-    for j in range(len(matches[i])):
-        display(matches[i][j])
+    display(matches[i])
+
+
+# In[41]:
+
+
+print(len(matches))
+print(len(noMatches))
 
