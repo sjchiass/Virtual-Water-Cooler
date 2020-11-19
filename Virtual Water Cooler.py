@@ -1,14 +1,14 @@
 
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 
 # Pip Installs
 #!pip install pywin32
 
 
-# In[ ]:
+# In[2]:
 
 
 """Initialization"""
@@ -18,7 +18,7 @@ from IPython.display import display
 import win32com.client as win32
 
 
-# In[ ]:
+# In[3]:
 
 
 """Global Variables"""
@@ -29,7 +29,7 @@ matches = []
 noMatches = []
 
 
-# In[3]:
+# In[4]:
 
 
 """Helper Functions"""
@@ -125,7 +125,7 @@ def tGroup(t, df):
 
 
 
-# In[4]:
+# In[5]:
 
 
 """Load the Data"""
@@ -148,7 +148,7 @@ display(df)
 dfCopy = df.copy()
 
 
-# In[5]:
+# In[6]:
 
 
 """Create Groups of People Who Said Yes to Only Within Field"""
@@ -162,7 +162,7 @@ display(yPeople)
 yOWF = groupby(yPeople, 'Which field are you in?')
 
 
-# In[6]:
+# In[7]:
 
 
 """Match People Who Said Yes to Only Within Field to Other People Who said Yes"""
@@ -176,7 +176,7 @@ for g in range(len(yOWF)):
     pair = yOWF[g].iloc[[0]]
     
     # Make all the possible pairs per group until there's only one left
-    # while the length of the group is greater than 1
+    # While the length of the group is greater than 1
     while (len(yOWF[g]) > 1):
         
         # Group by language
@@ -187,6 +187,7 @@ for g in range(len(yOWF)):
         
         # If after filtering the group is greater than one
         if (len(t) > 1):
+            
             # Remove the person from the t group
             t = t.drop(pair.isin(t).index)
 
@@ -226,7 +227,7 @@ for g in range(len(yOWF)):
     pair = None
 
 
-# In[7]:
+# In[8]:
 
 
 """Select the Groups People Who Said Yes & Still Haven't Been Matched Yet"""
@@ -243,19 +244,18 @@ if (len(yPeople) > 0):
     for g in range(len(yOWF)):
         if ("Yes" in yOWF[g]['Do you want to be matched ONLY WITHIN your field?'].unique()):
             yGroups.append(yOWF[g])
-            
-for i in range(len(yGroups)):
-    # Print the groups
-    display(yGroups[i])
 
 
-# In[8]:
+# In[9]:
 
 
 """Match People Who Said Yes & Still Haven't Been Matched Yet"""
 # For each group
 for i in range(len(yGroups)):
 
+    # Print the groups
+    display(yGroups[i])
+    
     # Create a data frame per group of all the people who said Yes
     yPersons = yGroups[i].loc[yGroups[i]['Do you want to be matched ONLY WITHIN your field?'] == "Yes"]
     
@@ -306,7 +306,7 @@ for i in range(len(yGroups)):
             matches.append(pair)
             
             """
-            # Unsure if this needs to be here
+            Unsure if this needs to be here
             # Else there is only 1 person (left) in these groups within people who said yes
             else:
                 # Add this person to the list of no matches
@@ -341,4 +341,204 @@ for i in range(len(yGroups)):
 
 # Print updated dfCopy
 display(dfCopy)
+
+
+# In[10]:
+
+
+"""Create Group of People Who Speak French"""
+# Create a data frame of the people who speak French
+fr = dfCopy.loc[dfCopy['What language would you like to converse in?'] == "French"]
+
+# Display fr
+display(fr)
+
+
+# In[11]:
+
+
+"""Match People Who Speak French with Other People Who Speak French"""
+"""WARNING: Potentially an infinite loop"""
+
+# For each person in fr
+for p in range(len(fr)):
+    
+    # Add the first person to the pair
+    pair = fr.iloc[[0]]
+    
+    # Make all the possible pairs per group until there's only one left
+    # While the length of the group is greater than 1
+    while (len(fr) > 1):
+        
+        # Group by time
+        t = tGroup(fr.iat[0, 3], lang)
+        
+        # If after filtering the group is greater than one
+        if (len(t) > 1):
+            
+            # Remove the person from the t group
+            t = t.drop(pair.isin(t).index)
+
+            # Remove the person from the group
+            fr = fr.drop(pair.index)
+
+            # Remove the person from the data
+            dfCopy = dfCopy.drop(pair.isin(dfCopy).index)
+            
+            # Shuffle the rows (Random match)
+            t = t.sample(frac = 1)
+
+            # Add the first person in the shuffled group to the pair
+            pair = pair.append(t.iloc[[0]], ignore_index = True)
+
+            # Remove the person from the group
+            fr = fr.drop(t.iloc[[0]].index)
+
+            # Remove the person from the data
+            dfCopy = dfCopy.drop(t.iloc[[0]].isin(dfCopy).index)
+
+            # Add the pair to the matches list
+            matches.append(pair)
+            
+        # Else there is only 1 person (left)
+        else:
+            # Do nothing. Exit the while loop
+            break
+        
+    # Clear the pair
+    pair = None
+
+# Print the updated French group
+display(fr)
+
+
+# In[12]:
+
+
+"""Match People Who Speak French & Still Haven't Been Matched Yet"""
+# Remove everyone who speaks French in the data frame
+dfCopy = dfCopy.drop(fr.index)
+
+# Make all the possible pair per group with people who speak French until there's only one left
+# While there is more than 0 persons who speak French
+while (len(fr) > 0):
+
+    # Add the first person to the pair
+    pair = fr.iloc[[0]]
+
+    # Group by time
+    t = tGroup(pair.iat[0, 3], dfCopy)
+
+    # If after filtering the group is greater than 0
+    if (len(t) > 0):
+
+        # Remove the person from fr list
+        fr = fr.drop(pair.isin(fr).index)
+
+        # If after filtering the group is greater than 1
+        if (len(t) > 1):
+
+            # Shuffle the rows (Random match)
+            t = t.sample(frac = 1)
+
+        # Add the first person in the shuffled group to the pair
+        pair = pair.append(t.iloc[[0]], ignore_index = True)
+
+        # Remove the person from the data
+        dfCopy = dfCopy.drop(t.iloc[[0]].isin(dfCopy).index)
+
+        # Add the pair to the matches list
+        matches.append(pair)
+
+        """
+        Unsure if this needs to be here
+        # Else there is only 1 person (left) who speaks French
+        else:
+            # Add this person to the list of no matches
+            noMatches.append(pair)
+
+            # Remove the person from the fr list
+            fr = fr.drop(pair.isin(fr).index)
+        """
+
+    # Else there is only 1 person (left) who speaks French
+    else:
+        # Add this person to the list of no matches
+        noMatches.append(pair)
+
+        # Remove the person from the fr list
+        fr = fr.drop(pair.isin(fr).index)
+
+    # Clear the pair
+    pair = None
+
+# Print updated dfCopy
+display(dfCopy)
+
+
+# In[13]:
+
+
+"""Match People Who Still Haven't Been Matched Yet"""
+# Make all the possible pairs until there's only one left
+# While there are still people
+while (len(dfCopy) > 0):
+
+    # Add the first person to the pair
+    pair = dfCopy.iloc[[0]]
+
+    # Remove the person from list
+    dfCopy = dfCopy.drop(pair.index)
+    
+    # Group by time
+    t = tGroup(pair.iat[0, 3], dfCopy)
+
+    # If after filtering the group is greater than 0
+    if (len(t) > 0):
+
+        # If after filtering the group is greater than 1
+        if (len(t) > 1):
+
+            # Shuffle the rows (Random match)
+            t = t.sample(frac = 1)
+
+        # Add the first person in the shuffled group to the pair
+        pair = pair.append(t.iloc[[0]], ignore_index = True)
+
+        # Remove the person from the data
+        dfCopy = dfCopy.drop(t.iloc[[0]].isin(dfCopy).index)
+
+        # Add the pair to the matches list
+        matches.append(pair)
+
+        """
+        Unsure if this needs to be here
+        # Else there is only 1 person (left) who speaks French
+        else:
+            # Add this person to the list of no matches
+            noMatches.append(pair)
+        """
+
+    # Else there is only 1 person left
+    else:
+        # Add this person to the list of no matches
+        noMatches.append(pair)
+
+    # Clear the pair
+    pair = None
+
+# Print updated dfCopy (Should be empty)
+display(dfCopy)
+
+
+# In[14]:
+
+
+# Check outputs
+for pair in matches:
+    display(pair)
+
+print("\nThese are the persons who were not matched")
+for person in noMatches:
+    display(person)
 
