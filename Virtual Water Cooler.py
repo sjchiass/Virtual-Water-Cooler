@@ -1,14 +1,14 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[17]:
 
 
 # Pip Installs
 #!pip install pywin32
 
 
-# In[2]:
+# In[18]:
 
 
 """Initialization"""
@@ -18,7 +18,7 @@ from IPython.display import display
 import win32com.client as win32
 
 
-# In[3]:
+# In[19]:
 
 
 """Global Variables"""
@@ -29,7 +29,7 @@ matches = []
 noMatches = []
 
 
-# In[4]:
+# In[20]:
 
 
 """Helper Functions"""
@@ -68,22 +68,16 @@ def langGroup(l, df):
     # If language is English
     if (l == "English"):
         
-        # Select all the rows that contain English or No preference
-        Lang = df.loc[((df['What language would you like to converse in?'] == "English") |
+        # Return all the rows that contain English or No preference
+        return df.loc[((df['What language would you like to converse in?'] == "English") |
                       (df['What language would you like to converse in?'] == "No preference"))]
-        
-        # Return the data frame of English and No preference speakers
-        return Lang
     
     # Else if language is French
     elif (l == "French"):
         
-        # Select all the rows that contain French or No preference
-        Lang = df.loc[((df['What language would you like to converse in?'] == "French") |
+        # Return all the rows that contain French or No preference
+        return df.loc[((df['What language would you like to converse in?'] == "French") |
                       (df['What language would you like to converse in?'] == "No preference"))]
-        
-        # Return the data frame of French and No preference speakers
-        return Lang
     
     # Else the language is No preference
     else:
@@ -101,22 +95,16 @@ def tGroup(t, df):
     # If time is Morning
     if (t == "Morning"):
         
-        # Select all the rows that contain Morning or No preference
-        T = df.loc[((df['When would you like to chat?'] == "Morning") | 
+        # Return all the rows that contain Morning or No preference
+        return df.loc[((df['When would you like to chat?'] == "Morning") | 
                    (df['When would you like to chat?'] == "No preference"))]
-        
-        # Return the data frame of people who prefer to chat in the Morning and No preference 
-        return T
     
     # Else if time is Afternoon
     elif (t == "Afternoon"):
         
-        # Select all the rows that contain Afternoon or No preference
-        T = df.loc[((df['When would you like to chat?'] == "Afternoon") |
+        # Return all the rows that contain Afternoon or No preference
+        return df.loc[((df['When would you like to chat?'] == "Afternoon") |
                   (df['When would you like to chat?'] == "No preference"))]
-        
-        # Return the data frame of people who prefer to chat in the Morning and No preference
-        return T
     
     # Else the time is No preference
     else:
@@ -124,9 +112,142 @@ def tGroup(t, df):
         return df
 
 
+"""
+Desc:
+    Function that picks the language.
+    Params: pair (pandas DataFrame)
+    Output: the language (string)
+"""
+def language(pair):
+    # If the first person or the second person said English
+    if ((pair.iat[0, 2] == "English") | (pair.iat[1, 2] == "English")):
+        
+        # Return English
+        return "English"
+    
+    # Else if the first person or second person said French
+    elif ((pair.iat[0, 2] == "French") | (pair.iat[1, 2] == "French")):
+        
+        # Return French
+        return "French"
+    
+    # Else it was No preference
+    else:
+        return "either English or French"
 
-# In[5]:
 
+"""
+Desc:
+    Function that picks the time.
+    Params: pair (pandas DataFrame)
+    Output: the time (string)
+"""
+def time(pair):
+    # If the first person or the second person said Morning
+    if ((pair.iat[0, 3] == "Morning") | (pair.iat[1, 3] == "Morning")):
+        
+        # Return Morning
+        return "Morning"
+    
+    # Else if the first person or second person said Afternoon
+    elif ((pair.iat[0, 3] == "Afternoon") | (pair.iat[1, 3] == "Afternoon")):
+        
+        # Return Afternoon
+        return "Afternoon"
+    
+    # Else it was No preference
+    else:
+        return "Morning or Afternoon"
+
+
+"""
+Desc:
+    Function that picks the language (French).
+    Params: pair (pandas DataFrame)
+    Output: the language (string)
+"""
+def langue(pair):
+    # If the first person or the second person said Anglais
+    if ((pair.iat[0, 2] == "Anglais") | (pair.iat[1, 2] == "Anglais")):
+        
+        # Return Anglais
+        return "Anglais"
+    
+    # Else if the first person or second person said Français
+    elif ((pair.iat[0, 2] == "Français") | (pair.iat[1, 2] == "Français")):
+        
+        # Return Français
+        return "Français"
+    
+    # Else it was Pas de préférence
+    else:
+        return "soit Anglais ou Français"
+
+
+"""
+Desc:
+    Function that picks the time (French).
+    Params: pair (pandas DataFrame)
+    Output: the language (string)
+"""
+def temps(pair):
+    # If the first person or the second person said Matin
+    if ((pair.iat[0, 3] == "Matin") | (pair.iat[1, 3] == "Matin")):
+        
+        # Return la Matinée
+        return "la Matinée"
+    
+    # Else if the first person or second person said Après-midi
+    elif ((pair.iat[0, 3] == "Après-midi") | (pair.iat[1, 3] == "Après-midi")):
+        
+        # Return l'Après-midi
+        return "l'Après-midi"
+    
+    # Else it was Pas de préférence
+    else:
+        return "la Matinée ou l'Après-midi"
+        
+        
+"""
+Desc:
+    Function that sends an email.
+    Params: recipients (string), subject (string), text (string)
+    Output: An email
+    Note: you must be logged onto your Outlook 2013 account first before this will run
+"""
+def email(recipients, subject, text, profilename="Outlook 2013"):
+    oa = win32.Dispatch("Outlook.Application")
+
+    Msg = oa.CreateItem(0)
+    Msg.To = recipients
+
+    Msg.Subject = subject
+    Msg.Body = text
+
+    Msg.Display()
+    # Msg.Send()
+
+
+
+# In[21]:
+
+
+# Create a English-French dictionary
+engDict = {
+    "English": "Anglais",
+    "French": "Français",
+    "Morning": "Matin",
+    "Afternoon": "Après-midi",
+    "No preference": "Pas de préférence",
+    "Field 1 - Office of the Chief Statistician": "Secteur 1 - Bureau du Statisticien en Chef",
+    "Field 3 - Corporate Strategy and Management": "Secteur 3 - Stratégies et Gestion Intégrées",
+    "Field 4 - Strategic Engagement": "Secteur 4 - Engagement Stratégique",
+    "Field 5 - Economics Statistics": "Secteur 5 - Statistiques Économique",
+    "Field 6 - Strategic Data Management, Methods, and Analysis": "Secteur 6 - Gestion Stratégique des Données, Méthodes et Analyse",
+    "Field 7 - Census, Regional Services, and Operations": "Secteur 7 - Recensement, Services Régionaux, et Opérations",
+    "Field 8 - Social Health and Labour Statistics": "Secteur 8 - Statistiques Sociale, de la Santé et du Travail",
+    "Field 9 - Digital Solutions": "Secteur 9 - Solutions Numériques",
+}
 
 """Load the Data"""
 # Read the translated, combined responses csv file skipping the column header row.
@@ -148,7 +269,7 @@ display(df)
 dfCopy = df.copy()
 
 
-# In[6]:
+# In[22]:
 
 
 """Create Groups of People Who Said Yes to Only Within Field"""
@@ -162,7 +283,7 @@ display(yPeople)
 yOWF = groupby(yPeople, 'Which field are you in?')
 
 
-# In[7]:
+# In[23]:
 
 
 """Match People Who Said Yes to Only Within Field to Other People Who said Yes"""
@@ -227,7 +348,7 @@ for g in range(len(yOWF)):
     pair = None
 
 
-# In[8]:
+# In[24]:
 
 
 """Select the Groups People Who Said Yes & Still Haven't Been Matched Yet"""
@@ -246,7 +367,7 @@ if (len(yPeople) > 0):
             yGroups.append(yOWF[g])
 
 
-# In[9]:
+# In[25]:
 
 
 """Match People Who Said Yes & Still Haven't Been Matched Yet"""
@@ -343,7 +464,7 @@ for i in range(len(yGroups)):
 display(dfCopy)
 
 
-# In[10]:
+# In[26]:
 
 
 """Create Group of People Who Speak French"""
@@ -354,7 +475,7 @@ fr = dfCopy.loc[dfCopy['What language would you like to converse in?'] == "Frenc
 display(fr)
 
 
-# In[11]:
+# In[27]:
 
 
 """Match People Who Speak French with Other People Who Speak French"""
@@ -412,7 +533,7 @@ for p in range(len(fr)):
 display(fr)
 
 
-# In[12]:
+# In[28]:
 
 
 """Match People Who Speak French & Still Haven't Been Matched Yet"""
@@ -476,7 +597,7 @@ while (len(fr) > 0):
 display(dfCopy)
 
 
-# In[13]:
+# In[29]:
 
 
 """Match People Who Still Haven't Been Matched Yet"""
@@ -531,7 +652,7 @@ while (len(dfCopy) > 0):
 display(dfCopy)
 
 
-# In[14]:
+# In[30]:
 
 
 # Check outputs
@@ -541,4 +662,95 @@ for pair in matches:
 print("\nThese are the persons who were not matched")
 for person in noMatches:
     display(person)
+
+
+# In[31]:
+
+
+"""Automated Emails for Matched Groups"""
+# For each pair in list of matches
+for pair in matches:
+
+    # Body text of email (English)
+    text = """Hello {} and {},
+
+
+You have been matched together for a Virtual Watercooler conversation. We recommend using MS 
+Teams scheduled during regular business hours for a conversation of at about 10 minutes but it is up to 
+you to decide how to proceed.
+
+The group prefers to chat in {} in the {}. You work in {} and {}, respectively.
+
+As this is our beta version so please reach out to Innovation Coordinator / Coord de l'innovation 
+(STATCAN) <email>@<email domain> with all of your 
+feedback, questions and suggestions. Thank you for using the StatCan Virtual Watercooler.
+
+
+
+Sincerely,
+
+The StatCan Virtual Watercooler Team
+
+Innovation Secretariat""".format(pair.iat[0, 1],  pair.iat[1, 1], # Names
+                                 language(pair), # Language preference
+                                 time(pair), # Time preference
+                                 pair.iat[0, 4], pair.iat[1, 4]) # Field
+
+    # French version
+    # Map the values for Language, Time Preference, and Field to their dictionary values (Translate English to French)
+    pair.iloc[:, 2:5] = pair.applymap(engDict.get)
+    
+    # French translation of the email
+    textFr = """Bonjour {} and {},
+
+
+Vous avez été jumelés pour une causerie virtuelle. Nous vous recommandons d’utiliser MS Teams 
+pendant les heures normales de travail pour discuter environ 10 minutes, mais c’est à vous de décider 
+de la manière de procéder.
+
+Le groupe préfère discuter en {} dans {}. Vous travaillez dans {} et {}, respectivement.
+
+Comme il s’agit d’une version bêta, nous vous invitons à communiquer avec le coordonnateur de 
+l’innovation de Statistique Canada (<email>@<email domain>) 
+si vous avez des commentaires, des questions et des suggestions. Nous vous remercions de participer aux 
+causeries virtuelles de Statistique Canada.
+
+
+Bien cordialement,
+
+L’Équipe des causeries virtuelles de Statistique Canada 
+
+Secrétariat de l’innovation""".format(pair.iat[0, 1],  pair.iat[1, 1], # Names
+                                 langue(pair), # Language preference
+                                 temps(pair), # Time preference
+                                 pair.iat[0, 4], pair.iat[1, 4]) # Field
+    
+    # Final email message
+    message = text + "\n\n\n" + textFr
+    print(message)
+
+    # The emails from each person in the pair
+    recipients = pair.iat[0, 0] + "; " + pair.iat[1, 0]
+    
+    # Send the emails
+    #email(recipients, "Virtual Water Cooler", message)
+
+
+# In[32]:
+
+
+# NOT FOR BETA
+"""Automated Emails for No Matches"""
+
+# For each person in the nomatch list, write the body of the email
+#for person in noMatches:
+    # Body of the email for those with no matches. The format will always output the name from each dataframe
+#    text = """Hello {},
+
+#You will be notified by email when there has been a match. Would you still like to meet new people?
+#If yes, please contact the Innovation Coordinator at 
+#<email>@<email domain>""".format(nomatchGroups[i].iat[0,1])
+         
+
+#    email(person.iat[0,0], "Virtual Water Cooler", message)
 
