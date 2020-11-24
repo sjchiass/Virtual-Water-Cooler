@@ -1,14 +1,14 @@
 
 # coding: utf-8
 
-# In[17]:
+# In[ ]:
 
 
 # Pip Installs
 #!pip install pywin32
 
 
-# In[18]:
+# In[ ]:
 
 
 """Initialization"""
@@ -18,7 +18,7 @@ from IPython.display import display
 import win32com.client as win32
 
 
-# In[19]:
+# In[ ]:
 
 
 """Global Variables"""
@@ -29,7 +29,7 @@ matches = []
 noMatches = []
 
 
-# In[20]:
+# In[ ]:
 
 
 """Helper Functions"""
@@ -229,7 +229,7 @@ def email(recipients, subject, text, profilename="Outlook 2013"):
 
 
 
-# In[21]:
+# In[ ]:
 
 
 # Create a English-French dictionary
@@ -269,7 +269,7 @@ display(df)
 dfCopy = df.copy()
 
 
-# In[22]:
+# In[ ]:
 
 
 """Create Groups of People Who Said Yes to Only Within Field"""
@@ -283,7 +283,7 @@ display(yPeople)
 yOWF = groupby(yPeople, 'Which field are you in?')
 
 
-# In[23]:
+# In[ ]:
 
 
 """Match People Who Said Yes to Only Within Field to Other People Who said Yes"""
@@ -293,36 +293,36 @@ for g in range(len(yOWF)):
     # Display the groups
     display(yOWF[g])
     
-    # Add the first person to the pair
-    pair = yOWF[g].iloc[[0]]
-    
     # Make all the possible pairs per group until there's only one left
-    # While the length of the group is greater than 1
-    while (len(yOWF[g]) > 1):
+    # While the length of the group is greater than 0
+    while (len(yOWF[g]) > 0):
+        
+        # Add the first person to the pair
+        pair = yOWF[g].iloc[[0]]
+
+        # Remove the person from the group
+        yOWF[g] = yOWF[g].drop(pair.index)
         
         # Group by language
-        lang = langGroup(yOWF[g].iat[0, 2], yOWF[g])
+        lang = langGroup(pair.iat[0, 2], yOWF[g])
         
         # Group by time
-        t = tGroup(yOWF[g].iat[0, 3], lang)
+        t = tGroup(pair.iat[0, 3], lang)
         
-        # If after filtering the group is greater than one
-        if (len(t) > 1):
+        # If after filtering the group is greater than 0
+        if (len(t) > 0):
             
-            # Remove the person from the t group
-            t = t.drop(pair.isin(t).index)
-
-            # Remove the person from the group
-            yOWF[g] = yOWF[g].drop(pair.index)
-
             # Remove the person from the yPeople list
-            yPeople = yPeople.drop(pair.isin(yPeople).index)
+            yPeople = yPeople.drop(pair.index)
 
             # Remove the person from the data
             dfCopy = dfCopy.drop(pair.isin(dfCopy).index)
             
-            # Shuffle the rows (Random match)
-            t = t.sample(frac = 1)
+            # If after filtering the group is greater than 1
+            if (len(t) > 1):
+                
+                # Shuffle the rows (Random match)
+                t = t.sample(frac = 1)
 
             # Add the first person in the shuffled group to the pair
             pair = pair.append(t.iloc[[0]], ignore_index = True)
@@ -343,12 +343,12 @@ for g in range(len(yOWF)):
         else:
             # Do nothing. Exit the while loop
             break
-        
+  
     # Clear the pair
     pair = None
 
 
-# In[24]:
+# In[ ]:
 
 
 """Select the Groups People Who Said Yes & Still Haven't Been Matched Yet"""
@@ -367,7 +367,7 @@ if (len(yPeople) > 0):
             yGroups.append(yOWF[g])
 
 
-# In[25]:
+# In[ ]:
 
 
 """Match People Who Said Yes & Still Haven't Been Matched Yet"""
@@ -464,7 +464,7 @@ for i in range(len(yGroups)):
 display(dfCopy)
 
 
-# In[26]:
+# In[ ]:
 
 
 """Create Group of People Who Speak French"""
@@ -475,7 +475,7 @@ fr = dfCopy.loc[dfCopy['What language would you like to converse in?'] == "Frenc
 display(fr)
 
 
-# In[27]:
+# In[ ]:
 
 
 """Match People Who Speak French with Other People Who Speak French"""
@@ -533,7 +533,7 @@ for p in range(len(fr)):
 display(fr)
 
 
-# In[28]:
+# In[ ]:
 
 
 """Match People Who Speak French & Still Haven't Been Matched Yet"""
@@ -597,7 +597,7 @@ while (len(fr) > 0):
 display(dfCopy)
 
 
-# In[29]:
+# In[ ]:
 
 
 """Match People Who Still Haven't Been Matched Yet"""
@@ -652,7 +652,7 @@ while (len(dfCopy) > 0):
 display(dfCopy)
 
 
-# In[30]:
+# In[ ]:
 
 
 # Check outputs
@@ -664,7 +664,7 @@ for person in noMatches:
     display(person)
 
 
-# In[31]:
+# In[ ]:
 
 
 """Automated Emails for Matched Groups"""
@@ -682,7 +682,7 @@ you to decide how to proceed.
 The group prefers to chat in {} in the {}. You work in {} and {}, respectively.
 
 As this is our beta version so please reach out to Innovation Coordinator / Coord de l'innovation 
-(STATCAN) <email>@<email domain> with all of your 
+(STATCAN) statcan.innovationcoordinator-coorddelinnovation.statcan@canada.ca with all of your 
 feedback, questions and suggestions. Thank you for using the StatCan Virtual Watercooler.
 
 
@@ -711,7 +711,7 @@ de la manière de procéder.
 Le groupe préfère discuter en {} dans {}. Vous travaillez dans {} et {}, respectivement.
 
 Comme il s’agit d’une version bêta, nous vous invitons à communiquer avec le coordonnateur de 
-l’innovation de Statistique Canada (<email>@<email domain>) 
+l’innovation de Statistique Canada (statcan.innovationcoordinator-coorddelinnovation.statcan@canada.ca) 
 si vous avez des commentaires, des questions et des suggestions. Nous vous remercions de participer aux 
 causeries virtuelles de Statistique Canada.
 
@@ -736,7 +736,7 @@ Secrétariat de l’innovation""".format(pair.iat[0, 1],  pair.iat[1, 1], # Name
     #email(recipients, "Virtual Water Cooler", message)
 
 
-# In[32]:
+# In[ ]:
 
 
 # NOT FOR BETA
@@ -749,7 +749,7 @@ Secrétariat de l’innovation""".format(pair.iat[0, 1],  pair.iat[1, 1], # Name
 
 #You will be notified by email when there has been a match. Would you still like to meet new people?
 #If yes, please contact the Innovation Coordinator at 
-#<email>@<email domain>""".format(nomatchGroups[i].iat[0,1])
+#statcan.innovationcoordinator-coorddelinnovation.statcan@canada.ca""".format(nomatchGroups[i].iat[0,1])
          
 
 #    email(person.iat[0,0], "Virtual Water Cooler", message)
